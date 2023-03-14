@@ -1,24 +1,41 @@
-import logo from './logo.svg';
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
+import Login from './Pages/Login';
+import User from './Pages/User';
+import Admin from './Pages/Admin';
+
 
 function App() {
+  const user = JSON.parse(window.sessionStorage.getItem('context'));
+  var userType = '';
+  if (user !== null) {
+    userType = user.userType;
+  }
+
+  function isUser() {
+    if (userType === 'User') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function isAdmin() {
+    if (userType === 'Admin') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/user" element={isUser() ? <User /> : <Login />} />
+        <Route path="/admin" element={isAdmin() ? <Admin /> : <Login />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
